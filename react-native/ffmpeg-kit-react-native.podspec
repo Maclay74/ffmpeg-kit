@@ -1,28 +1,30 @@
+require "json"
+
+package = JSON.parse(File.read(File.join(__dir__, "package.json")))
+
 Pod::Spec.new do |s|
-    s.name             = 'ffmpeg-kit-react-native'
-    s.version          = '6.0'   # Must match what ffmpeg-kit-react-native expects.
-    s.summary          = 'Custom full-gpl FFmpegKit iOS frameworks from NooruddinLakhani.'
-    s.homepage         = 'https://github.com/NooruddinLakhani/ffmpeg-kit-ios-full-gpl'
-    s.license          = { :type => 'LGPL' }
-    s.author           = { 'NooruddinLakhani' => 'https://github.com/NooruddinLakhani' }
-    s.platform         = :ios, '12.1'
-    s.static_framework = true
-    s.requires_arc     = true
-  
-    # Use the HTTP source to fetch the zipped package directly.
-    s.source           = { :http => 'https://github.com/NooruddinLakhani/ffmpeg-kit-ios-full-gpl/archive/refs/tags/latest.zip' }
-  
-    # Because the frameworks are inside the extracted archive under:
-    # ffmpeg-kit-ios-full-gpl-latest/ffmpeg-kit-ios-full-gpl/6.0-80adc/
-    # we list each of the needed frameworks with the full relative path.
-    s.vendored_frameworks = [
-      'ffmpeg-kit-ios-full-gpl-latest/ffmpeg-kit-ios-full-gpl/6.0-80adc/libswscale.xcframework',
-      'ffmpeg-kit-ios-full-gpl-latest/ffmpeg-kit-ios-full-gpl/6.0-80adc/libswresample.xcframework',
-      'ffmpeg-kit-ios-full-gpl-latest/ffmpeg-kit-ios-full-gpl/6.0-80adc/libavutil.xcframework',
-      'ffmpeg-kit-ios-full-gpl-latest/ffmpeg-kit-ios-full-gpl/6.0-80adc/libavformat.xcframework',
-      'ffmpeg-kit-ios-full-gpl-latest/ffmpeg-kit-ios-full-gpl/6.0-80adc/libavfilter.xcframework',
-      'ffmpeg-kit-ios-full-gpl-latest/ffmpeg-kit-ios-full-gpl/6.0-80adc/libavdevice.xcframework',
-      'ffmpeg-kit-ios-full-gpl-latest/ffmpeg-kit-ios-full-gpl/6.0-80adc/libavcodec.xcframework',
-      'ffmpeg-kit-ios-full-gpl-latest/ffmpeg-kit-ios-full-gpl/6.0-80adc/ffmpegkit.xcframework'
-    ]
+  s.name         = package["name"]
+  s.version      = package["version"]
+  s.summary      = package["description"]
+  s.homepage     = package["homepage"]
+  s.license      = package["license"]
+  s.authors      = package["author"]
+
+  s.platform          = :ios
+  s.requires_arc      = true
+  s.static_framework  = true
+
+  s.source       = { :git => "https://github.com/Maclay74/ffmpeg-kit.git" }
+
+  s.default_subspec   = 'full-gpl'
+
+  s.dependency "React-Core"
+
+  s.subspec 'full-gpl' do |ss|
+      ss.source_files      = '**/FFmpegKitReactNativeModule.m',
+                             '**/FFmpegKitReactNativeModule.h'
+      ss.dependency 'ffmpeg-kit-ios-full-gpl', "6.0"
+      ss.ios.deployment_target = '12.1'
   end
+
+end
