@@ -7,6 +7,7 @@ Pod::Spec.new do |s|
     s.author           = { 'NooruddinLakhani' => 'https://github.com/NooruddinLakhani' }
     s.platform         = :ios, '12.1'
     s.static_framework = true
+    s.requires_arc     = true
   
     # Use the HTTP source to fetch the zipped package directly.
     s.source           = { :http => 'https://github.com/NooruddinLakhani/ffmpeg-kit-ios-full-gpl/archive/refs/tags/latest.zip' }
